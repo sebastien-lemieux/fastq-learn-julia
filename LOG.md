@@ -35,5 +35,5 @@
 * Next: re-read (https://discourse.julialang.org/t/developing-a-kmer-counter-in-julia/292/2)+
   implement a basic hash table for biojulia dnamer?
 
-2020-03-16 (J012, 15:15-):
-* Github setup
+2020-03-16 (J012, 15:15-15:40, 17h35-17h40, 17h55-):
+* Initial github setup, explore the use of github within Atom/juno
