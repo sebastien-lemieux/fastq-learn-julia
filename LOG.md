@@ -37,3 +37,8 @@
 
 2020-03-16 (J012, 15:15-15:40, 17h35-17h40, 17h55-):
 * Initial github setup, explore the use of github within Atom/juno
+* Expanded the definition of MerTable.
+* Experimentation with parametric types (now working!).
+* Primitive hash table (with collision).
+* 6.8 s/M (without checks).
+* Next: Resolve collision.
