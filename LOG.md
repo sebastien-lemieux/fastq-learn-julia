@@ -43,7 +43,7 @@
 * 6.8 s/M (without checks).  13.7 with checks.
 * Next: Resolve collision.
 
-2020-03-18 (J14, 21:05-):
+2020-03-18 (J14, 21:05-23:05, 2h):
 * Added linear probing to resolve collisions. 12.0 s/M.
 * Explored optimization: no gains from @inbounds, most time spent in correct mapping.
 * Little expected gains from anything more fancy than linear probing.
