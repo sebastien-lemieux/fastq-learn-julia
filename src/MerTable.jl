@@ -46,7 +46,7 @@ function Base.show(io::IO, t::MerTable{E}) where {E}
     println(io, "Occupancy: ", t.unique / t.capacity * 100, "%")
 end
 
-function build_mertable!(fn, d::MerTable)
+function build_mertable!(fn, d::MerTable{E}) where {E}
     count_seq = 0
     count_k = 0
     for record in open(fn) |> GzipDecompressorStream |> FASTQ.Reader
@@ -56,10 +56,8 @@ function build_mertable!(fn, d::MerTable)
             record!(d, c)
         end
         count_seq += 1
-        if count_seq > 1e6
+        if count_seq > (8e6 / 56)
             break
         end
     end
-    println(count_k)
-    return d
 end

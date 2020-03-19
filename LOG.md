@@ -48,3 +48,5 @@
 * Explored optimization: no gains from @inbounds, most time spent in correct mapping.
 * Little expected gains from anything more fancy than linear probing.
 * Not ideal reporting of collision frequency.
+* Naive parallel implementation (incorrect), issue with GC / Mem allocation.
+  Need better understanding of parallel (threads) vs. mutable arrays.
