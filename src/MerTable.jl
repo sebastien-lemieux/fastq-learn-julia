@@ -17,14 +17,26 @@ function MerTable{E}(capacity) where {E}
 end
 
 function record!(t::MerTable{E}, m::UInt64) where {E}
-    i = m % t.capacity + 1
-    t.data[i] = m
-    if t.count[i] == 0
-        t.unique += 1
-    elseif m != t.data[i]
-        t.collision += 1
+    index::UInt64 = m % t.capacity + 1
+    if t.data[index] == m
+        t.count[index] += 1
+        return
     end
-    t.count[i] += 1
+    while t.count[index] > 0
+        if t.data[index] == m
+            t.count[index] += 1
+            return
+        end
+        t.collision += 1
+        index += 1
+        if index > t.capacity
+            index -= t.capacity
+        end
+    end
+    # Now t.count[index] == 0
+    t.data[index] = m
+    t.count[index] = 1
+    t.unique += 1
 end
 
 function Base.show(io::IO, t::MerTable{E}) where {E}
