@@ -50,3 +50,8 @@
 * Not ideal reporting of collision frequency.
 * Naive parallel implementation (incorrect), issue with GC / Mem allocation.
   Need better understanding of parallel (threads) vs. mutable arrays.
+* Next: check @spawn + Task
+
+2020-03-21 (J17, 8:30-, ):
+* Reading on multiprocessing using Distributed module... need to test mem. management.
+  Confirmed that arrays are copied when @spawn calling.
