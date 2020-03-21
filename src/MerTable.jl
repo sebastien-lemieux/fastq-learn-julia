@@ -1,49 +1,56 @@
-using FASTX
-using CodecZlib
-using Printf
-using BioSequences
+# using FASTX
+# using CodecZlib
+# using BioSequences
 
-mutable struct MerTable{E}
-    data::Array{E} # The k-mer stored
-    count::Array{Int}   # The number observed
-    collision::Int      # Nb. of collision
-    unique::Int         # Total number of unique k-mer observed
-    capacity::Int       # Size of the arrays
+ktype = UInt64    # Up to 32-mer
+ctype = UInt32  # Up to 4G occurrences
+
+mutable struct MerTable
+    key::Array{ktype}
+    count::Array{ctype}
+    overflow::Array{ktype}
+    n_kc::ctype  # nb. of keys in key-count table
+    n_of::ctype  # nb. of keys in overflow
 end
 
-function MerTable{E}(capacity) where {E}
-    return MerTable(zeros(E, capacity), zeros(Int, capacity),
-                    0, 0, capacity)
+function MerTable(overflowsize)
+    return MerTable(Array{ktype}(undef, 0), Array{ktype}(undef, 0), Array{ktype}(undef, UInt(overflowsize)),
+                    0, 0)
 end
 
-function record!(t::MerTable{E}, m::UInt64) where {E}
-    index::UInt64 = m % t.capacity + 1
-    if t.data[index] == m
-        t.count[index] += 1
-        return
+m = MerTable(10)
+
+function find_index(t::MerTable, k::ktype, low::Int=1, high::Int=length(t.key))
+    # Assumes the key exists
+    println((low, high))
+    if low == high
+        return low
     end
-    while t.count[index] > 0
-        if t.data[index] == m
-            t.count[index] += 1
-            return
-        end
-        t.collision += 1
-        index += 1
-        if index > t.capacity
-            index -= t.capacity
-        end
+    mid = div(low + high, 2)
+    if k <= t.key[mid]
+        return find_index(t, k, low, mid)
+    else
+        return find_index(t, k, mid + 1, high)
     end
-    # Now t.count[index] == 0
-    t.data[index] = m
-    t.count[index] = 1
-    t.unique += 1
 end
 
-function Base.show(io::IO, t::MerTable{E}) where {E}
-    println(io, "Capacity: ", t.capacity)
-    println(io, "Collision: ", t.collision, " (", t.collision / t.capacity * 100, "%)")
-    println(io, "Unique (M): ", t.unique / 1e6)
-    println(io, "Occupancy: ", t.unique / t.capacity * 100, "%")
+# m.key = 1:7
+# find_index(m, ktype(0))
+
+function merge_of(t::MerTable)
+    unique_of = unique(sort(t.overflow))
+    new_key = vcat(t.key, unique_of)
+
+end
+
+function record!(t::MerTable, m::ktype)
+    # Search in kc
+    t.n_of += 1
+    t.overflow[t.n_of] = m
+    if t.n_of == length(t.overflow)
+        merge_of(t)
+    end
+    return (t.n_kc, t.n_of)
 end
 
 function build_mertable!(fn, d::MerTable{E}) where {E}

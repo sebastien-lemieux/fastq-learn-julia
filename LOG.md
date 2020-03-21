@@ -55,3 +55,4 @@
 2020-03-21 (J17, 8:30-, ):
 * Reading on multiprocessing using Distributed module... need to test mem. management.
   Confirmed that arrays are copied when @spawn calling.
+* Started work on an alternative MerTable (branch sorted_table).
