@@ -10,24 +10,24 @@
 * On 8 threads, reaches 3.6M reads per sec (est. 1m for a whole dataset, 224M reads)
 * Next: encode in biosequences, test amount of ram to keep sequences, then extract k-mers
 
-2020-03-06 (J02, 9:45-11:30, 1h45, 4h45):
+2020-03-06 (J02, 1h45):
 * Extract sequence from record, create biosequence
 * First successful attempt at building k-mer table (4M, k=5, 81s)
 * Most time spent hashing
 * Using convert as a specialized hash: (13.1s)
 * Appears much longer with k=14 (never finishes???), maybe try to rebuild from scratch = understand + language
 
-2020-03-09 (J05, 10:15-11:45, 1h30, 6h15):
+2020-03-09 (J05, 1h30):
 * Windows update (yuk!) + Read on stream
 * Basic struct to create an iterable (iter_test.jl)
 * Basic fastq parser as an iterable (load3.jl)
 
-2020-03-12 (J08, 19:50-21:00, 1h10, 7h25):
+2020-03-12 (J08, 1h10):
 * Read on parametric types, not entirely clear... Not using it.
 * More complex iterable to extract k-mer, currently as string
 * Next: convert MerGenerator to use a UInt64 mer representation, need DNA convert to 2 bits.
 
-2020-03-15 (J11, 14:45-17:00, 2h15, 9h40):
+2020-03-15 (J11, 2h15):
 * Finished a "from scratch" 2-bit implementation of k-mer table (N -> A currently).
 * Performance down to 18k reads per sec! (for any k up to 31).
 * Re-test of the biojulia implementation, time increase dramatically around k = 11. Due to the dict.
@@ -35,7 +35,7 @@
 * Next: re-read (https://discourse.julialang.org/t/developing-a-kmer-counter-in-julia/292/2)+
   implement a basic hash table for biojulia dnamer?
 
-2020-03-16 (J12, 15:15-15:40, 17:35-17:40, 17:55-19:25, 2h, 11h40):
+2020-03-16 (J12, 2h):
 * Initial github setup, explore the use of github within Atom/juno
 * Expanded the definition of MerTable.
 * Experimentation with parametric types (now working!).
@@ -43,7 +43,7 @@
 * 6.8 s/M (without checks).  13.7 with checks.
 * Next: Resolve collision.
 
-2020-03-18 (J14, 21:05-23:05, 2h):
+2020-03-18 (J14, 2h):
 * Added linear probing to resolve collisions. 12.0 s/M.
 * Explored optimization: no gains from @inbounds, most time spent in correct mapping.
 * Little expected gains from anything more fancy than linear probing.
@@ -52,7 +52,9 @@
   Need better understanding of parallel (threads) vs. mutable arrays.
 * Next: check @spawn + Task
 
-2020-03-21 (J17, 8:30-, ):
+2020-03-21 (J17, 4h):
 * Reading on multiprocessing using Distributed module... need to test mem. management.
   Confirmed that arrays are copied when @spawn calling.
 * Started work on an alternative MerTable (branch sorted_table).
+* New approach is very memory efficient, but very slow (~105 s/M!).
+* Add 12nt index to the sorted structure (a la STAR).

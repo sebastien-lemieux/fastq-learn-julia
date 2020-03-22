@@ -5,26 +5,25 @@ include("src/MerTable.jl")
 
 cd("C:\\Users\\slemi\\prog\\Load")
 
+# function build_mertable(directory::String, d::MerTable{E}) where {E}
+#     all_files = readdir(directory)
+#     Threads.@threads for f in all_files
+#         println("Starting ", f)
+#         build_mertable!(directory * f, d)
+#         println("Ending   ", f)
+#     end
+#     return d
+# end
+
+
 fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
+d = MerTable(1000000)
+@profiler build_mertable!(fn, d)
 
-function build_mertable(directory::String, d::MerTable{E}) where {E}
-    all_files = readdir(directory)
-    Threads.@threads for f in all_files
-        println("Starting ", f)
-        build_mertable!(directory * f, d)
-        println("Ending   ", f)
-    end
-    return d
-end
-
-
-# d = MerTable{UInt64}(Int(1e8))
-# @time build_mertable!(fn, d)
-
-d = 0
-GC.gc()
-@time d = MerTable{UInt64}(Int(1e9))
-@time d = build_mertable("../10H005/", d)
+# @time d = MerTable{UInt64}(10000)
+#
+#
+# @time d = build_mertable("../10H005/", d)
 
 
 print(d)
