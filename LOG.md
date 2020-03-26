@@ -58,3 +58,11 @@
 * Started work on an alternative MerTable (branch sorted_table).
 * New approach is very memory efficient, but very slow (~105 s/M!).
 * Add 12nt index to the sorted structure (a la STAR).
+
+2020-03-24 (2h):
+* First attempt at a 12-bp preindex, 50.8 s/M.
+* Multiple attempt (failed) at profiling, including allocation profiling.
+* Allocations can be tracked using option: --track-allocation=all (juno:settings)
+* Found out that most allocation are done when calling getindex() on an Array.
+  Difficult to avoid. This fits with most lines taking time in the profiling
+  being [] accesses on arrays. @inbounds seems to reduce some allocations.

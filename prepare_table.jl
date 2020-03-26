@@ -17,8 +17,8 @@ cd("C:\\Users\\slemi\\prog\\Load")
 
 
 fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
-d = MerTable(1000000)
-@profiler build_mertable!(fn, d)
+d = MerTable(10000000, 13)
+@time build_mertable!(fn, d)
 
 # @time d = MerTable{UInt64}(10000)
 #
