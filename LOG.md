@@ -67,7 +67,8 @@
   Difficult to avoid. This fits with most lines taking time in the profiling
   being [] accesses on arrays. @inbounds seems to reduce some allocations.
 
-2020-03-27 (21:00-):
+2020-03-27 (1h30):
 * Need to combine both approach. Use hash to build the table then transfer to a
   sorted table to save space to hold the whole cohort.
-* 
+* Lots need to be done to complete the merge: sort the Smert, create index, query
+  the MerTable, handle removal of low count Mers...
