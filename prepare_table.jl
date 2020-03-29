@@ -1,6 +1,7 @@
 
 ## Aim for 28.8 sec for a 1M reads. This will give 15m for 250M reads on 8 threads.
 
+include("src/Smert.jl")
 include("src/MerTable.jl")
 
 cd("C:\\Users\\slemi\\prog\\Load")
@@ -17,8 +18,13 @@ cd("C:\\Users\\slemi\\prog\\Load")
 
 
 fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
-d = MerTable(10000000, 13)
-@time build_mertable!(fn, d)
+# d = Smert(10000000, 13)
+# @time build_smert!(fn, d)
+
+t = MerTable(100e6)
+@time build_mertable!(fn, t)
+@time s = Smert(t, 12)
+print(t)
 
 # @time d = MerTable{UInt64}(10000)
 #
@@ -26,7 +32,6 @@ d = MerTable(10000000, 13)
 # @time d = build_mertable("../10H005/", d)
 
 
-print(d)
 
 # 4 12.5
 # 8

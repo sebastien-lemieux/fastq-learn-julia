@@ -66,3 +66,8 @@
 * Found out that most allocation are done when calling getindex() on an Array.
   Difficult to avoid. This fits with most lines taking time in the profiling
   being [] accesses on arrays. @inbounds seems to reduce some allocations.
+
+2020-03-27 (21:00-):
+* Need to combine both approach. Use hash to build the table then transfer to a
+  sorted table to save space to hold the whole cohort.
+* 
