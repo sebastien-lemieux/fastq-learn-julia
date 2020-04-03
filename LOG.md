@@ -72,3 +72,6 @@
   sorted table to save space to hold the whole cohort.
 * Lots need to be done to complete the merge: sort the Smert, create index, query
   the MerTable, handle removal of low count Mers...
+
+2020-04-03 (1h40):
+* Update to Readme mostly. Some performance testing.

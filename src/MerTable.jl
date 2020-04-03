@@ -61,7 +61,7 @@ function build_mertable!(fn, d::MerTable)
             record!(d, c)
         end
         count_seq += 1
-        if count_seq > (1e6)
+        if count_seq > (2e6)  ## Limit the number of reads for initial testing
             break
         end
     end

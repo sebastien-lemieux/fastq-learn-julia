@@ -27,9 +27,8 @@ end
 #
 function Smert(t::MerTable, indexwidth, mincount = 1)
     n = t.unique
-    println(n)
-    s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n),
-              Array{ktype}(undef, 0), 0, 0,
+    println("Smert: nb. of unique: ", n)
+    s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n), 0,
               fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
               (31 - indexwidth) * 2)
     i_s = 1
