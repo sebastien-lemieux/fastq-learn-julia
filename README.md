@@ -1,4 +1,4 @@
-# fastq-learn-julia
+# k-mer table in julia
 
 ## Data and objective
 
@@ -36,3 +36,5 @@ __Constraints__:
 - [X] Preparation of a time sheet to track time investment.
 - [X] Setup basic Github repository structure and establish initial workflow from Atom/Juno.
 - Final report (where, structure, res. production, fig. prep...)
+
+Time sheet: https://docs.google.com/spreadsheets/d/1LEfk4cWtw-cFPHTBzwMCpgf5g2ybY8MZ8gd2DBbS5bo/edit?usp=sharing
