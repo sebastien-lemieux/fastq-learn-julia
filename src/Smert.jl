@@ -17,38 +17,78 @@ mutable struct Smert # Sorted Mer Table
     indexshift::ktype
 end
 
-# function Smert(overflowsize, indexwidth)
-#     return Smert(Array{ktype}(undef, 0), Array{ktype}(undef, 0),
-#                     Array{ktype}(undef, UInt(overflowsize)),
-#                     0, 0,
-#                     fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
-#                     (31 - indexwidth) * 2)
-# end
-#
-function Smert(t::MerTable, indexwidth, mincount = 1)
+function Smert(t::MerTable, indexwidth, subtcount = 0)
+    println("yeah")
     n = t.unique
     println("Smert: nb. of unique: ", n)
-    s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n), 0,
+    # s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n), 0,
+    #           fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
+    #           (31 - indexwidth) * 2)
+
+    s = Smert(zeros(ktype, n), zeros(ctype, n), 0,
               fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
               (31 - indexwidth) * 2)
+    println("index size: ", 4^indexwidth)
+
     i_s = 1
     for i in 1:length(t.data)
         tmp_c = t.count[i]
-        if tmp_c >= mincount
-            s.key[i_s] = t.data[i]
-            s.count[i_s] = tmp_c
+        if tmp_c > subtcount
+            tmp_c -= subtcount
+        else
+            tmp_c = 0
+        end
+        if tmp_c > 0
+            if i_s > n
+                println("yurk!!!!!")
+                println("yurk!!!!!")
+                println("yurk!!!!!")
+                println("yurk!!!!!")
+                println("yurk!!!!!")
+                break
+            end
+            # s.key[i_s] = t.data[i]
+            # s.count[i_s] = tmp_c
             i_s += 1
         end
     end
     s.n_kc = i_s - 1
-    println(s.n_kc)
+    # n = s.n_kc
+
+    println("Number of entries passing threshold: ", Int(s.n_kc))
+
+    # Copy only the keys that were allocated.
+    # s.key = s.key[1:n]
+    # s.count = s.count[1:n]
+
+    # sort(s)
+    # create_index(s)
+
     return s
 end
 
+import Base.sort  ## needed to extend an existing function
+function sort(s::Smert)
+    println("Sorting")
+    p = sortperm(s.key)
+    s.key = s.key[p]
+    s.count = s.count[p]
+end
+
+get_index(key::ktype, t::Smert) = key >> t.indexshift + 1
+
+function init_index(s::Smert)
+    println("Indexing")
+    for i in 1:length(s.key)
+        tk = get_index(s.key[i], s)
+        s.index[tk].low = min(s.index[tk].low, i)
+        s.index[tk].high = min(s.index[tk].high, i)
+    end
+end
 
 function find_index(t::Smert, k::ktype)
-    @inbounds low = t.index[(k >> t.indexshift) + 1].low
-    @inbounds high = t.index[(k >> t.indexshift) + 1].high
+    @inbounds low = t.index[get_index(k, t)].low
+    @inbounds high = t.index[get_index(k, t)].high
     while high > low
         # println((low, high))
         mid = div(low + high, 2)
@@ -61,10 +101,10 @@ function find_index(t::Smert, k::ktype)
     return low
 end
 
-function update_range!(index::Array{SmertRange}, tk::ktype, nk_i)
-    @inbounds index[tk] = SmertRange(min(index[tk].low, nk_i),
-                           max(index[tk].high, nk_i))
-end
+# function update_range!(index::Array{SmertRange}, tk::ktype, nk_i)
+#     @inbounds index[tk] = SmertRange(min(index[tk].low, nk_i),
+#                            max(index[tk].high, nk_i))
+# end
 
 # function merge_of(t::Smert)
 #     unique_of = unique(sort(t.overflow[1:t.n_of]))

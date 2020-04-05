@@ -47,7 +47,7 @@ end
 function Base.show(io::IO, t::MerTable)
     println(io, "Capacity: ", t.capacity)
     println(io, "Collision: ", t.collision, " (", t.collision / t.capacity * 100, "%)")
-    println(io, "Unique (M): ", t.unique / 1e6)
+    println(io, "Unique (M): ", t.unique / 1e5)
     println(io, "Occupancy: ", t.unique / t.capacity * 100, "%")
 end
 
@@ -61,7 +61,7 @@ function build_mertable!(fn, d::MerTable)
             record!(d, c)
         end
         count_seq += 1
-        if count_seq > (2e6)  ## Limit the number of reads for initial testing
+        if count_seq > (1e5)  ## Limit the number of reads for initial testing
             break
         end
     end

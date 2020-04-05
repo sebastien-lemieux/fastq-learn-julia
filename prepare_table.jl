@@ -21,7 +21,7 @@ fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
 # d = Smert(10000000, 13)
 # @time build_smert!(fn, d)
 
-t = MerTable(1e9)
+t = MerTable(1e8)
 @time build_mertable!(fn, t)  # 15-18s/M
-@time s = Smert(t, 12) # 24s/M (fixed time?)
+@time s = Smert(t, 12, 0) # 24s/M (fixed time?)
 print(t)

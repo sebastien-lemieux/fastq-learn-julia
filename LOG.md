@@ -75,3 +75,8 @@
 
 2020-04-03 (1h40):
 * Update to Readme mostly. Some performance testing.
+
+2020-04-05 (15:45-):
+* Update installation to Julia 1.4.0
+* Started work on the MerTable import, stuck on a bug (missing string in println!) in Smert
+  constructor.
