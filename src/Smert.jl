@@ -21,13 +21,10 @@ function Smert(t::MerTable, indexwidth, subtcount = 0)
     println("yeah")
     n = t.unique
     println("Smert: nb. of unique: ", n)
-    # s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n), 0,
-    #           fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
-    #           (31 - indexwidth) * 2)
-
-    s = Smert(zeros(ktype, n), zeros(ctype, n), 0,
+    s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n), 0,
               fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
               (31 - indexwidth) * 2)
+
     println("index size: ", 4^indexwidth)
 
     i_s = 1
@@ -39,29 +36,21 @@ function Smert(t::MerTable, indexwidth, subtcount = 0)
             tmp_c = 0
         end
         if tmp_c > 0
-            if i_s > n
-                println("yurk!!!!!")
-                println("yurk!!!!!")
-                println("yurk!!!!!")
-                println("yurk!!!!!")
-                println("yurk!!!!!")
-                break
-            end
-            # s.key[i_s] = t.data[i]
-            # s.count[i_s] = tmp_c
+            s.key[i_s] = t.data[i]
+            s.count[i_s] = tmp_c
             i_s += 1
         end
     end
     s.n_kc = i_s - 1
-    # n = s.n_kc
+    n = s.n_kc
 
     println("Number of entries passing threshold: ", Int(s.n_kc))
 
     # Copy only the keys that were allocated.
-    # s.key = s.key[1:n]
-    # s.count = s.count[1:n]
+    s.key = s.key[1:n]
+    s.count = s.count[1:n]
 
-    # sort(s)
+    sort(s)
     # create_index(s)
 
     return s
@@ -87,8 +76,8 @@ function init_index(s::Smert)
 end
 
 function find_index(t::Smert, k::ktype)
-    @inbounds low = t.index[get_index(k, t)].low
-    @inbounds high = t.index[get_index(k, t)].high
+    low = t.index[get_index(k, t)].low
+    high = t.index[get_index(k, t)].high
     while high > low
         # println((low, high))
         mid = div(low + high, 2)
@@ -102,7 +91,7 @@ function find_index(t::Smert, k::ktype)
 end
 
 # function update_range!(index::Array{SmertRange}, tk::ktype, nk_i)
-#     @inbounds index[tk] = SmertRange(min(index[tk].low, nk_i),
+#     index[tk] = SmertRange(min(index[tk].low, nk_i),
 #                            max(index[tk].high, nk_i))
 # end
 
@@ -146,7 +135,7 @@ end
 # function record!(t::Smert, m::ktype)
 #     if t.n_kc > 0
 #         i = find_index(t, m)
-#         @inbounds if i != typemax(Int) && t.key[i] == m
+#         if i != typemax(Int) && t.key[i] == m
 #             t.count[i] += 1
 #             return (t.n_kc, t.n_of)
 #         end

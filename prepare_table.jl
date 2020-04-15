@@ -4,7 +4,7 @@
 include("src/MerTable.jl")
 include("src/Smert.jl")
 
-cd("C:\\Users\\slemi\\prog\\Load")
+cd("/Users/slemi/prog/data")
 
 # function build_mertable(directory::String, d::MerTable{E}) where {E}
 #     all_files = readdir(directory)
@@ -17,11 +17,11 @@ cd("C:\\Users\\slemi\\prog\\Load")
 # end
 
 
-fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
-# d = Smert(10000000, 13)
-# @time build_smert!(fn, d)
+# fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
+fn = "NS.1134.001.NEBNext_dual_i7_E3---NEBNext_dual_i5_E3.18H175_R1.fastq.gz"
 
-t = MerTable(1e8)
+t = MerTable(1e9)
 @time build_mertable!(fn, t)  # 15-18s/M
-@time s = Smert(t, 12, 0) # 24s/M (fixed time?)
-print(t)
+@time s = Smert(t, 12, 1) # 24s/M (fixed time?)
+
+# print(t)

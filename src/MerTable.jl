@@ -58,10 +58,10 @@ function build_mertable!(fn, d::MerTable)
         s = FASTQ.sequence(record)
         for m in each(DNAMer{31}, s)
             c = convert(ktype, fwmer(m))
-            record!(d, c)
+            @inbounds record!(d, c)
         end
         count_seq += 1
-        if count_seq > (1e5)  ## Limit the number of reads for initial testing
+        if count_seq > (1e6)  ## Limit the number of reads for initial testing
             break
         end
     end

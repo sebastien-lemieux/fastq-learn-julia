@@ -76,7 +76,12 @@
 2020-04-03 (1h40):
 * Update to Readme mostly. Some performance testing.
 
-2020-04-05 (15:45-):
+2020-04-05 (1h45):
 * Update installation to Julia 1.4.0
 * Started work on the MerTable import, stuck on a bug (missing string in println!) in Smert
   constructor.
+
+2020-04-15 (11:45-14:15, 15h- ):
+* Download data for a new sample (complete): 18H175
+* Intro to Windows' powershell, CLI ssh/scp, install of gzip
+* The strange bug (04-05) is actually in Atom/juno function to send a selected lines to the repl.
