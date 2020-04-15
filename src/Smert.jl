@@ -88,39 +88,66 @@ function find_index(t::Smert, k::ktype)
     return low
 end
 
-function merge_of(t::Smert)
-    unique_of = unique(sort(t.overflow[1:t.n_of]))
-    k_n = length(t.key)
-    u_n = length(unique_of)
-    nk_n = k_n + u_n
-    new_key = Array{ktype}(undef, nk_n)
-    new_count = Array{ctype}(undef, nk_n)
-    new_index = fill(SmertRange(typemax(Int), typemin(Int)), length(t.index))
+function Smert(a::Smert, b::Smert)
+    n_a = length(a.key)
+    n_b = length(b.key)
 
-    u_i = k_i = nk_i = 1
-    while (k_i <= k_n || u_i <= u_n)
-        # println((u_i, k_i, nk_i))
-        if (k_i <= k_n) && ((u_i > u_n) || (t.key[k_i] < unique_of[u_i]))
-            new_key[nk_i] = t.key[k_i]
-            new_count[nk_i] = t.count[k_i]
-            update_range!(new_index, (new_key[nk_i] >> t.indexshift) + 1, nk_i)
-            nk_i += 1
-            k_i += 1
-        elseif (u_i <= u_n) && ((k_i > k_n) || (unique_of[u_i] < t.key[k_i]))
-            new_key[nk_i] = unique_of[u_i]
-            new_count[nk_i] = 0 # Will be added later
-            update_range!(new_index, (new_key[nk_i] >> t.indexshift) + 1, nk_i)
-            nk_i += 1
-            u_i += 1
+    # Empty and to large (will shrink later)
+    s = Smert(Array{ktype}(undef, n_a + n_b), Array{ktype}(undef, n_a, n_b), 0,
+              fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
+              (31 - indexwidth) * 2)
+
+    i_a = i_b = i_s = 1
+    pick(x, i_x) = (s.key[i_s] = x.key[i_x] ; s.count[i_s] = x.count[i_x] ; i_s )
+    while i_a <= n_a && i_b <= n_b
+        if i_a > n_a
+            #pick b
+            s.key[i_s] = b.key[i_b]
+            s.count[i_s] = b.count[i_b]
+            i_s += 1
+            i_b += 1
+        elseif i_b > n_b
+            #pick a
+        elseif a.key[i_a] < b.key[i_b]
+            #pick a
+        elseif b.key[i_b] < a.key[i_a]
+            #pick b
+        else # they are equal
+            #merge a,b
         end
     end
-    t.key = new_key
-    t.count = new_count
-    t.n_kc = length(new_key)
-    t.index = new_index
 
-    for i in 1:t.n_of
-        record!(t, t.overflow[i])
-    end
-    t.n_of = 0
+    # k_n = length(t.key)
+    # u_n = length(unique_of)
+    # nk_n = k_n + u_n
+    # new_key = Array{ktype}(undef, nk_n)
+    # new_count = Array{ctype}(undef, nk_n)
+    # new_index = fill(SmertRange(typemax(Int), typemin(Int)), length(t.index))
+    #
+    # u_i = k_i = nk_i = 1
+    # while (k_i <= k_n || u_i <= u_n)
+    #     # println((u_i, k_i, nk_i))
+    #     if (k_i <= k_n) && ((u_i > u_n) || (t.key[k_i] < unique_of[u_i]))
+    #         new_key[nk_i] = t.key[k_i]
+    #         new_count[nk_i] = t.count[k_i]
+    #         update_range!(new_index, (new_key[nk_i] >> t.indexshift) + 1, nk_i)
+    #         nk_i += 1
+    #         k_i += 1
+    #     elseif (u_i <= u_n) && ((k_i > k_n) || (unique_of[u_i] < t.key[k_i]))
+    #         new_key[nk_i] = unique_of[u_i]
+    #         new_count[nk_i] = 0 # Will be added later
+    #         update_range!(new_index, (new_key[nk_i] >> t.indexshift) + 1, nk_i)
+    #         nk_i += 1
+    #         u_i += 1
+    #     end
+    # end
+    # t.key = new_key
+    # t.count = new_count
+    # t.n_kc = length(new_key)
+    # t.index = new_index
+    #
+    # for i in 1:t.n_of
+    #     record!(t, t.overflow[i])
+    # end
+    # t.n_of = 0
 end
