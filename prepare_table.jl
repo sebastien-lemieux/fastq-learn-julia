@@ -18,10 +18,19 @@ cd("/Users/slemi/prog/data")
 
 
 # fn = "../10H005/10H005_ACTTGA_L001_R1_001.fastq.gz"
-fn = "NS.1134.001.NEBNext_dual_i7_E3---NEBNext_dual_i5_E3.18H175_R1.fastq.gz"
+fn_1 = "NS.1134.001.NEBNext_dual_i7_E3---NEBNext_dual_i5_E3.18H175_R1.fastq.gz"
+fn_2 = "NS.1134.001.NEBNext_dual_i7_E3---NEBNext_dual_i5_E3.18H175_R2.fastq.gz"
 
 t = MerTable(1e9)
-@time build_mertable!(fn, t)  # 15-18s/M
-@time s = Smert(t, 12, 1) # 24s/M (fixed time?)
+@time build_mertable!(fn_1, t)  # 15-18s/M
+@time s_1 = Smert(t, 12, 1) # 24s/M (fixed time?)
 
-# print(t)
+t = MerTable(1e9)
+@time build_mertable!(fn_2, t)  # 15-18s/M
+@time s_2 = Smert(t, 12, 1) # 24s/M (fixed time?)
+
+
+
+seq = DNAMer{31}("AAAAAAAATTTAATCAAGTGAAACGTAATAA")
+
+find_index(s_2, convert(ktype, seq))

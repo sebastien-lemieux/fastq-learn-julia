@@ -85,3 +85,5 @@
 * Download data for a new sample (complete): 18H175
 * Intro to Windows' powershell, CLI ssh/scp, install of gzip
 * The strange bug (04-05) is actually in Atom/juno function to send a selected lines to the repl.
+* Smert:index built (untested).
+* Now loads two files in two Smert, ready to work on merge.
