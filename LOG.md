@@ -88,6 +88,11 @@
 * Smert:index built (untested).
 * Now loads two files in two Smert, ready to work on merge.
 
+2020-04-16 (2h45):
+* Finished merge, tested (superficially).
+* Read on scoping, symbols. Tried to work with references and macros... without success.
 
 TODO:
-* check @code_warntype???
+* learn: scope for inner functions
+* learn: check @code_warntype???
+* threaded version of MerTable (difficult)

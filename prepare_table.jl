@@ -33,4 +33,9 @@ t = MerTable(1e9)
 
 seq = DNAMer{31}("AAAAAAAATTTAATCAAGTGAAACGTAATAA")
 
+find_index(s_1, convert(ktype, seq))
 find_index(s_2, convert(ktype, seq))
+
+@time s_m = Smert(s_1, s_2)
+
+find_index(s_m, convert(ktype, seq))
