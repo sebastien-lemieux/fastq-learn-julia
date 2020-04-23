@@ -21,15 +21,24 @@ cd("/Users/slemi/prog/data")
 fn_1 = "NS.1134.001.NEBNext_dual_i7_E3---NEBNext_dual_i5_E3.18H175_R1.fastq.gz"
 fn_2 = "NS.1134.001.NEBNext_dual_i7_E3---NEBNext_dual_i5_E3.18H175_R2.fastq.gz"
 
-t = MerTable(1e9)
+t = MerTable(1e9)  # about 12GB
+
 @time build_mertable!(fn_1, t)  # 15-18s/M
 @time s_1 = Smert(t, 12, 1) # 24s/M (fixed time?)
+
+open("test.bin", "w") do io
+    write(io, s_1)
+end
+
+s_3 = open("test.bin", "r") do io
+    s_3 = Smert(io)
+end
+
+
 
 t = MerTable(1e9)
 @time build_mertable!(fn_2, t)  # 15-18s/M
 @time s_2 = Smert(t, 12, 1) # 24s/M (fixed time?)
-
-
 
 seq = DNAMer{31}("AAAAAAAATTTAATCAAGTGAAACGTAATAA")
 

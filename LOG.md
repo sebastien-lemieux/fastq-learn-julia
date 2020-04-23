@@ -73,7 +73,6 @@
 * Lots need to be done to complete the merge: sort the Smert, create index, query
   the MerTable, handle removal of low count Mers...
 
-2020-04-03 (1h40):
 * Update to Readme mostly. Some performance testing.
 
 2020-04-05 (1h45):
@@ -92,7 +91,18 @@
 * Finished merge, tested (superficially).
 * Read on scoping, symbols. Tried to work with references and macros... without success.
 
+2020-04-21 (2h45):
+* Downloading small dataset, determine two samples to compare (Non-inv16: 03H090, inv16: 05H090).
+* Explored IO (binary and pretty print) of user-defined types in julia... not entirely clear yet!
+* First prototype of read/write for Smert. Seems blazing fast!
+
+2020-04-23 (8:45-):
+* 
+
+
+
 TODO:
 * learn: scope for inner functions
 * learn: check @code_warntype???
-* threaded version of MerTable (difficult)
+* opt: threaded version of MerTable (difficult)
+* opt: introduce graphing in the application

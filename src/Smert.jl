@@ -9,6 +9,7 @@ struct SmertRange
     high::Int
 end
 
+
 mutable struct Smert # Sorted Mer Table
     key::Array{ktype}
     count::Array{ctype}
@@ -18,9 +19,12 @@ mutable struct Smert # Sorted Mer Table
 end
 
 function Smert(t::MerTable, indexwidth, subtcount = 0)
+    # indexwidth: nb of nucl. used for pre-indexing the sorted table
+    # subtcount: subtract this nb. of count from actual count. Removes low count k-mers, shift back
+    # in the matrix (pseudo-count)
     n = t.unique
     println("Smert: nb. of unique: ", n)
-    s = Smert(Array{ktype}(undef, n), Array{ktype}(undef, n), 0,
+    s = Smert(Array{ktype}(undef, n), Array{ctype}(undef, n), 0,
               fill(SmertRange(typemax(Int), typemin(Int)), 4^indexwidth),
               (31 - indexwidth) * 2)
 
@@ -54,6 +58,44 @@ function Smert(t::MerTable, indexwidth, subtcount = 0)
 
     return s
 end
+
+import Base.show
+function show(io::IO, s::Smert)
+    println(io, "Nb. of keys: ", length(s.key))
+    for i in 1:10
+        println(io, DNAMer{31}(s.key[i]), ": ", s.count[i])
+    end
+    for i in 1:5
+        println(io, s.index[i].low, "-", s.index[i].high)
+    end
+end
+
+import Base.write
+function write(io::IO, s::Smert)
+    key_length = length(s.key)
+    index_length = length(s.index)
+
+    write(io, key_length)
+    write(io, index_length)
+    write(io, s.indexshift)
+    write(io, s.key)
+    write(io, s.count)
+    write(io, s.index)
+end
+
+function Smert(io::IO)
+    key_length = read(io, Int)
+    index_length = read(io, Int)
+    indexshift = read(io, ktype)
+    s = Smert(Array{ktype}(undef, key_length), Array{ctype}(undef, key_length), 0,
+              Array{SmertRange}(undef, index_length), indexshift)
+    read!(io, s.key)
+    read!(io, s.count)
+    read!(io, s.index)
+    return s
+end
+
+
 
 import Base.sort  ## needed to extend an existing function
 function sort(s::Smert)

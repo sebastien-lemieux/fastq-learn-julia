@@ -61,8 +61,9 @@ function build_mertable!(fn, d::MerTable)
             @inbounds record!(d, c)
         end
         count_seq += 1
-        if count_seq > (1e6)  ## Limit the number of reads for initial testing
-            break
-        end
+        # if count_seq > (1e6)  ## Limit the number of reads for initial testing
+        #     break
+        # end
     end
+    println("Read ", count_seq, " sequences.")
 end
